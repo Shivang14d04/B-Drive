@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.30;
 
-import "forge-std/Test.sol";
-import "../contracts/Bdrive.sol";
+import { Test } from "forge-std/Test.sol";
+import { Bdrive } from "../contracts/Bdrive.sol";
 
 contract BdriveTest is Test {
     Bdrive bdrive;

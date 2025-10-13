@@ -6,146 +6,101 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
   31337: {
-    YourContract: {
-      address: "0x700b6a60ce7eaaea56f065753d8dcb9653dbad35",
+    Bdrive: {
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
       abi: [
         {
-          type: "constructor",
+          type: "function",
+          name: "OwnerFiles",
           inputs: [
-            {
-              name: "_owner",
-              type: "address",
-              internalType: "address",
-            },
+            { name: "", type: "address", internalType: "address" },
+            { name: "", type: "uint256", internalType: "uint256" },
           ],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "receive",
-          stateMutability: "payable",
+          outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+          stateMutability: "view",
         },
         {
           type: "function",
-          name: "greeting",
+          name: "fileCount",
           inputs: [],
+          outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "files",
+          inputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+          outputs: [
+            { name: "name", type: "string", internalType: "string" },
+            { name: "cid", type: "string", internalType: "string" },
+            { name: "owner", type: "address", internalType: "address" },
+            { name: "timestamp", type: "uint256", internalType: "uint256" },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getAllFilesOfaUser",
+          inputs: [{ name: "_owner", type: "address", internalType: "address" }],
           outputs: [
             {
               name: "",
-              type: "string",
-              internalType: "string",
+              type: "tuple[]",
+              internalType: "struct Bdrive.File[]",
+              components: [
+                { name: "name", type: "string", internalType: "string" },
+                { name: "cid", type: "string", internalType: "string" },
+                { name: "owner", type: "address", internalType: "address" },
+                { name: "timestamp", type: "uint256", internalType: "uint256" },
+              ],
             },
           ],
           stateMutability: "view",
         },
         {
           type: "function",
-          name: "owner",
-          inputs: [],
+          name: "getFile",
+          inputs: [{ name: "_fileId", type: "uint256", internalType: "uint256" }],
           outputs: [
             {
               name: "",
-              type: "address",
-              internalType: "address",
+              type: "tuple",
+              internalType: "struct Bdrive.File",
+              components: [
+                { name: "name", type: "string", internalType: "string" },
+                { name: "cid", type: "string", internalType: "string" },
+                { name: "owner", type: "address", internalType: "address" },
+                { name: "timestamp", type: "uint256", internalType: "uint256" },
+              ],
             },
           ],
           stateMutability: "view",
         },
         {
           type: "function",
-          name: "premium",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "bool",
-              internalType: "bool",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "setGreeting",
+          name: "uploadFile",
           inputs: [
-            {
-              name: "_newGreeting",
-              type: "string",
-              internalType: "string",
-            },
+            { name: "_name", type: "string", internalType: "string" },
+            { name: "_cid", type: "string", internalType: "string" },
           ],
-          outputs: [],
-          stateMutability: "payable",
-        },
-        {
-          type: "function",
-          name: "totalCounter",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "userGreetingCounter",
-          inputs: [
-            {
-              name: "",
-              type: "address",
-              internalType: "address",
-            },
-          ],
-          outputs: [
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "withdraw",
-          inputs: [],
           outputs: [],
           stateMutability: "nonpayable",
         },
         {
           type: "event",
-          name: "GreetingChange",
+          name: "FileUploaded",
           inputs: [
-            {
-              name: "greetingSetter",
-              type: "address",
-              indexed: true,
-              internalType: "address",
-            },
-            {
-              name: "newGreeting",
-              type: "string",
-              indexed: false,
-              internalType: "string",
-            },
-            {
-              name: "premium",
-              type: "bool",
-              indexed: false,
-              internalType: "bool",
-            },
-            {
-              name: "value",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
+            { name: "fileId", type: "uint256", indexed: true, internalType: "uint256" },
+            { name: "owner", type: "address", indexed: true, internalType: "address" },
+            { name: "name", type: "string", indexed: false, internalType: "string" },
+            { name: "cid", type: "string", indexed: false, internalType: "string" },
+            { name: "timestamp", type: "uint256", indexed: false, internalType: "uint256" },
           ],
           anonymous: false,
         },
+        { type: "error", name: "FileCIDRequired", inputs: [] },
+        { type: "error", name: "FileDoesNotExist", inputs: [] },
+        { type: "error", name: "FileNameRequired", inputs: [] },
       ],
       inheritedFunctions: {},
       deployedOnBlock: 1,

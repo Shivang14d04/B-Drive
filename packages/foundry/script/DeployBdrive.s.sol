@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.30;
 
-import "forge-std/Script.sol";
-import "../contracts/Bdrive.sol";
+import { Script, console } from "forge-std/Script.sol";
+import { Bdrive } from "../contracts/Bdrive.sol";
 
 contract DeployBdrive is Script {
     function run() external {
