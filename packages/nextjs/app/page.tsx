@@ -1,72 +1,99 @@
 "use client";
 
-import Link from "next/link";
-import type { NextPage } from "next";
+import { useState } from "react";
+import lighthouse from "@lighthouse-web3/sdk";
 import { useAccount } from "wagmi";
-import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
-const Home: NextPage = () => {
-  const { address: connectedAddress } = useAccount();
+export default function DrivePage() {
+  const { address } = useAccount();
+  const [fileName, setFileName] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+
+  const { writeContractAsync } = useScaffoldWriteContract("Bdrive");
+
+  const { data: userFiles, refetch } = useScaffoldReadContract({
+    contractName: "Bdrive",
+    functionName: "getAllFilesOfaUser",
+    args: [address],
+  });
+
+  // 🔥 Upload to Lighthouse
+  const handleUploadToLighthouse = async () => {
+    if (!fileName || !file) return alert("Enter file name and choose a file");
+
+    setUploading(true);
+    try {
+      const apiKey = process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY as string;
+      const output = await lighthouse.upload(file, apiKey);
+      const cid = output.data.Hash;
+      console.log("📦 Uploaded to IPFS:", cid);
+
+      // Call smart contract
+      await writeContractAsync({
+        functionName: "uploadFile",
+        args: [fileName, cid],
+      });
+
+      alert("✅ File uploaded successfully!");
+      setFileName("");
+      setFile(null);
+      refetch();
+    } catch (err) {
+      console.error("Upload failed:", err);
+      alert("❌ Upload failed. Check console for details.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
-    <>
-      <div className="flex items-center flex-col grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
-          </h1>
-          <div className="flex justify-center items-center space-x-2 flex-col">
-            <p className="my-2 font-medium">Connected Address:</p>
-            <Address address={connectedAddress} />
-          </div>
+    <main className="min-h-screen bg-gray-950 text-white flex flex-col items-center p-8">
+      <h1 className="text-4xl font-bold mb-8">🗂️ Decentralized Drive</h1>
 
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/nextjs/app/page.tsx
-            </code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              YourContract.sol
-            </code>{" "}
-            in{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/hardhat/contracts
-            </code>
-          </p>
-        </div>
-
-        <div className="grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col md:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contracts
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Explore your local transactions with the{" "}
-                <Link href="/blockexplorer" passHref className="link">
-                  Block Explorer
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-          </div>
-        </div>
+      {/* Upload Section */}
+      <div className="bg-gray-900 p-6 rounded-xl w-full max-w-md">
+        <h2 className="text-xl mb-4">Upload File</h2>
+        <input
+          type="text"
+          placeholder="File name"
+          value={fileName}
+          onChange={e => setFileName(e.target.value)}
+          className="w-full p-2 mb-3 rounded bg-gray-800"
+        />
+        <input
+          type="file"
+          onChange={e => setFile(e.target.files?.[0] || null)}
+          className="w-full p-2 mb-3 rounded bg-gray-800"
+        />
+        <button
+          onClick={handleUploadToLighthouse}
+          disabled={uploading}
+          className={`w-full px-4 py-2 rounded ${uploading ? "bg-gray-600" : "bg-blue-600 hover:bg-blue-500"}`}
+        >
+          {uploading ? "Uploading..." : "Upload to IPFS"}
+        </button>
       </div>
-    </>
-  );
-};
 
-export default Home;
+      {/* File List */}
+      <h2 className="text-2xl mt-10 mb-4">Your Files</h2>
+      <div className="space-y-3">
+        {userFiles?.map((file: any, idx: number) => (
+          <div key={idx} className="bg-gray-800 p-3 rounded w-80">
+            <p className="font-semibold">{file.name}</p>
+            <p className="text-gray-400 text-sm">{new Date(Number(file.timestamp) * 1000).toLocaleString()}</p>
+            <a
+              href={`https://gateway.lighthouse.storage/ipfs/${file.cid}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:underline"
+            >
+              View File
+            </a>
+          </div>
+        ))}
+      </div>
+    </main>
+  );
+}
