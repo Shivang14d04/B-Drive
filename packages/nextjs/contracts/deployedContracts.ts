@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     Bdrive: {
-      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       abi: [
         {
           type: "function",
@@ -18,6 +18,13 @@ const deployedContracts = {
           ],
           outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
           stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "deleteFile",
+          inputs: [{ name: "_fileId", type: "uint256", internalType: "uint256" }],
+          outputs: [],
+          stateMutability: "nonpayable",
         },
         {
           type: "function",
@@ -35,6 +42,7 @@ const deployedContracts = {
             { name: "cid", type: "string", internalType: "string" },
             { name: "owner", type: "address", internalType: "address" },
             { name: "timestamp", type: "uint256", internalType: "uint256" },
+            { name: "exists", type: "bool", internalType: "bool" },
           ],
           stateMutability: "view",
         },
@@ -52,6 +60,7 @@ const deployedContracts = {
                 { name: "cid", type: "string", internalType: "string" },
                 { name: "owner", type: "address", internalType: "address" },
                 { name: "timestamp", type: "uint256", internalType: "uint256" },
+                { name: "exists", type: "bool", internalType: "bool" },
               ],
             },
           ],
@@ -71,6 +80,7 @@ const deployedContracts = {
                 { name: "cid", type: "string", internalType: "string" },
                 { name: "owner", type: "address", internalType: "address" },
                 { name: "timestamp", type: "uint256", internalType: "uint256" },
+                { name: "exists", type: "bool", internalType: "bool" },
               ],
             },
           ],
@@ -88,6 +98,15 @@ const deployedContracts = {
         },
         {
           type: "event",
+          name: "FileDeleted",
+          inputs: [
+            { name: "fileId", type: "uint256", indexed: true, internalType: "uint256" },
+            { name: "owner", type: "address", indexed: true, internalType: "address" },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
           name: "FileUploaded",
           inputs: [
             { name: "fileId", type: "uint256", indexed: true, internalType: "uint256" },
@@ -101,6 +120,7 @@ const deployedContracts = {
         { type: "error", name: "FileCIDRequired", inputs: [] },
         { type: "error", name: "FileDoesNotExist", inputs: [] },
         { type: "error", name: "FileNameRequired", inputs: [] },
+        { type: "error", name: "NotFileOwner", inputs: [] },
       ],
       inheritedFunctions: {},
       deployedOnBlock: 1,

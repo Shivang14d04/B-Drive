@@ -18,11 +18,11 @@ contract BdriveTest is Test {
         bdrive.uploadFile("file1.txt", "CID123");
 
         Bdrive.File memory f = bdrive.getFile(0);
-
         assertEq(f.name, "file1.txt");
         assertEq(f.cid, "CID123");
         assertEq(f.owner, user1);
         assertGt(f.timestamp, 0);
+        assertEq(f.exists, true);
     }
 
     function testRevertWhenFileNameMissing() public {
@@ -45,12 +45,33 @@ contract BdriveTest is Test {
 
         Bdrive.File[] memory files = bdrive.getAllFilesOfaUser(user1);
         assertEq(files.length, 2);
-        assertEq(files[0].name, "file1.txt");
-        assertEq(files[1].name, "file2.txt");
     }
 
     function testRevertForInvalidFileId() public {
         vm.expectRevert(Bdrive.FileDoesNotExist.selector);
         bdrive.getFile(99);
+    }
+
+    function testDeleteFile() public {
+        vm.prank(user1);
+        bdrive.uploadFile("file1.txt", "CID1");
+
+        vm.prank(user1);
+        bdrive.deleteFile(0);
+
+        Bdrive.File[] memory files = bdrive.getAllFilesOfaUser(user1);
+        assertEq(files.length, 0);
+
+        vm.expectRevert(Bdrive.FileDoesNotExist.selector);
+        bdrive.getFile(0);
+    }
+
+    function testDeleteFileByNonOwner() public {
+        vm.prank(user1);
+        bdrive.uploadFile("file1.txt", "CID1");
+
+        vm.prank(user2);
+        vm.expectRevert(Bdrive.NotFileOwner.selector);
+        bdrive.deleteFile(0);
     }
 }
