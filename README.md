@@ -1,4 +1,4 @@
-# 🚀 B-Drive — Decentralized Cloud Storage on Web3
+# B-Drive — Decentralized Cloud Storage on Web3
 
 B-Drive is a decentralized storage application inspired by Google Drive — built for **ETHOnline 2025** using **Scaffold-ETH 2**, **Next.js**, and **IPFS/Lit Protocol**.  
 It allows users to securely upload, view, and manage files using blockchain technology, ensuring **privacy, ownership, and censorship resistance**.
