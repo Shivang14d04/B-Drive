@@ -5,24 +5,44 @@
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
-  31337: {
+  11155111: {
     Bdrive: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0x3f07cfe170f4b1623845a68ac0be3c12760df6a9",
       abi: [
         {
           type: "function",
           name: "OwnerFiles",
           inputs: [
-            { name: "", type: "address", internalType: "address" },
-            { name: "", type: "uint256", internalType: "uint256" },
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
           ],
-          outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
           stateMutability: "view",
         },
         {
           type: "function",
           name: "deleteFile",
-          inputs: [{ name: "_fileId", type: "uint256", internalType: "uint256" }],
+          inputs: [
+            {
+              name: "_fileId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
           outputs: [],
           stateMutability: "nonpayable",
         },
@@ -30,37 +50,95 @@ const deployedContracts = {
           type: "function",
           name: "fileCount",
           inputs: [],
-          outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
           stateMutability: "view",
         },
         {
           type: "function",
           name: "files",
-          inputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
           outputs: [
-            { name: "name", type: "string", internalType: "string" },
-            { name: "cid", type: "string", internalType: "string" },
-            { name: "owner", type: "address", internalType: "address" },
-            { name: "timestamp", type: "uint256", internalType: "uint256" },
-            { name: "exists", type: "bool", internalType: "bool" },
+            {
+              name: "name",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "cid",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "owner",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "timestamp",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "exists",
+              type: "bool",
+              internalType: "bool",
+            },
           ],
           stateMutability: "view",
         },
         {
           type: "function",
           name: "getAllFilesOfaUser",
-          inputs: [{ name: "_owner", type: "address", internalType: "address" }],
+          inputs: [
+            {
+              name: "_owner",
+              type: "address",
+              internalType: "address",
+            },
+          ],
           outputs: [
             {
               name: "",
               type: "tuple[]",
               internalType: "struct Bdrive.File[]",
               components: [
-                { name: "name", type: "string", internalType: "string" },
-                { name: "cid", type: "string", internalType: "string" },
-                { name: "owner", type: "address", internalType: "address" },
-                { name: "timestamp", type: "uint256", internalType: "uint256" },
-                { name: "exists", type: "bool", internalType: "bool" },
+                {
+                  name: "name",
+                  type: "string",
+                  internalType: "string",
+                },
+                {
+                  name: "cid",
+                  type: "string",
+                  internalType: "string",
+                },
+                {
+                  name: "owner",
+                  type: "address",
+                  internalType: "address",
+                },
+                {
+                  name: "timestamp",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "exists",
+                  type: "bool",
+                  internalType: "bool",
+                },
               ],
             },
           ],
@@ -69,18 +147,44 @@ const deployedContracts = {
         {
           type: "function",
           name: "getFile",
-          inputs: [{ name: "_fileId", type: "uint256", internalType: "uint256" }],
+          inputs: [
+            {
+              name: "_fileId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
           outputs: [
             {
               name: "",
               type: "tuple",
               internalType: "struct Bdrive.File",
               components: [
-                { name: "name", type: "string", internalType: "string" },
-                { name: "cid", type: "string", internalType: "string" },
-                { name: "owner", type: "address", internalType: "address" },
-                { name: "timestamp", type: "uint256", internalType: "uint256" },
-                { name: "exists", type: "bool", internalType: "bool" },
+                {
+                  name: "name",
+                  type: "string",
+                  internalType: "string",
+                },
+                {
+                  name: "cid",
+                  type: "string",
+                  internalType: "string",
+                },
+                {
+                  name: "owner",
+                  type: "address",
+                  internalType: "address",
+                },
+                {
+                  name: "timestamp",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+                {
+                  name: "exists",
+                  type: "bool",
+                  internalType: "bool",
+                },
               ],
             },
           ],
@@ -90,8 +194,16 @@ const deployedContracts = {
           type: "function",
           name: "uploadFile",
           inputs: [
-            { name: "_name", type: "string", internalType: "string" },
-            { name: "_cid", type: "string", internalType: "string" },
+            {
+              name: "_name",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "_cid",
+              type: "string",
+              internalType: "string",
+            },
           ],
           outputs: [],
           stateMutability: "nonpayable",
@@ -100,8 +212,18 @@ const deployedContracts = {
           type: "event",
           name: "FileDeleted",
           inputs: [
-            { name: "fileId", type: "uint256", indexed: true, internalType: "uint256" },
-            { name: "owner", type: "address", indexed: true, internalType: "address" },
+            {
+              name: "fileId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "owner",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
           ],
           anonymous: false,
         },
@@ -109,21 +231,62 @@ const deployedContracts = {
           type: "event",
           name: "FileUploaded",
           inputs: [
-            { name: "fileId", type: "uint256", indexed: true, internalType: "uint256" },
-            { name: "owner", type: "address", indexed: true, internalType: "address" },
-            { name: "name", type: "string", indexed: false, internalType: "string" },
-            { name: "cid", type: "string", indexed: false, internalType: "string" },
-            { name: "timestamp", type: "uint256", indexed: false, internalType: "uint256" },
+            {
+              name: "fileId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "owner",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "name",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "cid",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "timestamp",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
           ],
           anonymous: false,
         },
-        { type: "error", name: "FileCIDRequired", inputs: [] },
-        { type: "error", name: "FileDoesNotExist", inputs: [] },
-        { type: "error", name: "FileNameRequired", inputs: [] },
-        { type: "error", name: "NotFileOwner", inputs: [] },
+        {
+          type: "error",
+          name: "FileCIDRequired",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FileDoesNotExist",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "FileNameRequired",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "NotFileOwner",
+          inputs: [],
+        },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 1,
+      deployedOnBlock: 9493617,
     },
   },
 } as const;

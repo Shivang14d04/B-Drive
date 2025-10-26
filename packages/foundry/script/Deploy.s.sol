@@ -6,9 +6,7 @@ import { Bdrive } from "../contracts/Bdrive.sol";
 
 contract DeployBdrive is Script {
     function run() external {
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-
-        vm.startBroadcast(deployerPrivateKey);
+        vm.startBroadcast();
         Bdrive bdrive = new Bdrive();
         vm.stopBroadcast();
 
