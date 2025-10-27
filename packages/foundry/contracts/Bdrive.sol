@@ -9,6 +9,7 @@ contract Bdrive {
 
     struct File {
         string name;
+        uint256 fileId;
         string cid;
         address owner;
         uint256 timestamp;
@@ -27,7 +28,14 @@ contract Bdrive {
         if (bytes(_name).length == 0) revert FileNameRequired();
         if (bytes(_cid).length == 0) revert FileCIDRequired();
 
-        files[fileCount] = File({ name: _name, cid: _cid, owner: msg.sender, timestamp: block.timestamp, exists: true });
+        files[fileCount] = File({
+            name: _name,
+            fileId: fileCount,
+            cid: _cid,
+            owner: msg.sender,
+            timestamp: block.timestamp,
+            exists: true
+        });
 
         OwnerFiles[msg.sender].push(fileCount);
 

@@ -21,14 +21,23 @@ import { toast } from "sonner";
 import { useAccount } from "wagmi";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
+interface UserFile {
+  fileId: number;
+  name: string;
+  cid: string;
+  owner: string;
+  timestamp: number;
+  exists: boolean;
+}
+
 export default function Dashboard() {
   const { address } = useAccount();
   const [fileName, setFileName] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<globalThis.File | null>(null); // browser file
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
-  const [files, setFiles] = useState<any[]>([]);
+  const [files, setFiles] = useState<UserFile[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [fileToDelete, setFileToDelete] = useState<number | null>(null);
 
@@ -39,11 +48,14 @@ export default function Dashboard() {
     args: [address],
   });
 
+  // Update files from blockchain
   useEffect(() => {
-    if (userFiles && Array.isArray(userFiles)) setFiles(userFiles);
+    if (userFiles && Array.isArray(userFiles)) {
+      setFiles(userFiles as UserFile[]);
+    }
   }, [userFiles]);
 
-  // Safe progress calculation
+  // Lighthouse progress callback
   const progressCallback = (progressData: any) => {
     const uploaded = progressData.uploaded ?? 0;
     const total = progressData.total ?? 1; // avoid division by 0
@@ -56,6 +68,7 @@ export default function Dashboard() {
       toast.warning("Please enter a file name and choose a file first!");
       return;
     }
+
     setUploading(true);
     setUploadProgress(0);
 
@@ -72,7 +85,7 @@ export default function Dashboard() {
         args: [fileName, cid],
       });
 
-      // Fetch updated file list from blockchain
+      // Fetch updated file list
       await refetch();
 
       toast.success("✅ File uploaded successfully!");
@@ -84,22 +97,25 @@ export default function Dashboard() {
       toast.error("❌ Upload failed. Please try again.");
     } finally {
       setUploading(false);
-      setUploadProgress(0);
     }
   };
 
   const handleDeleteFile = async () => {
     if (fileToDelete === null) return;
+
+    const fileId = files[fileToDelete]?.fileId;
+    if (fileId === undefined) return;
+
+    setDeleteDialogOpen(false);
+    setFileToDelete(null);
+
     try {
-      await writeContractAsync({ functionName: "deleteFile", args: [BigInt(fileToDelete)] });
+      await writeContractAsync({ functionName: "deleteFile", args: [BigInt(fileId)] });
       await refetch();
       toast.success("🗑️ File deleted successfully!");
     } catch (err) {
       console.error(err);
       toast.error("Failed to delete file!");
-    } finally {
-      setDeleteDialogOpen(false);
-      setFileToDelete(null);
     }
   };
 
@@ -165,7 +181,7 @@ export default function Dashboard() {
                 <p className="text-muted-foreground dark:text-muted-foreground-dark">No files found.</p>
               ) : (
                 <ul className="divide-y divide-border dark:divide-border-dark">
-                  {filteredFiles.map((file: any, idx: number) => (
+                  {filteredFiles.map((file, idx) => (
                     <li
                       key={`${file.cid}-${idx}`}
                       className="flex justify-between items-center py-3 px-2 hover:bg-muted/30 dark:hover:bg-muted-dark/30 transition-colors rounded-md"

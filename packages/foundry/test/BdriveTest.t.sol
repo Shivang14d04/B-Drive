@@ -19,6 +19,7 @@ contract BdriveTest is Test {
 
         Bdrive.File memory f = bdrive.getFile(0);
         assertEq(f.name, "file1.txt");
+        assertEq(f.fileId, 0);
         assertEq(f.cid, "CID123");
         assertEq(f.owner, user1);
         assertGt(f.timestamp, 0);
